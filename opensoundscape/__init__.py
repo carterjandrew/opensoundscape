@@ -38,5 +38,10 @@ from .annotations import BoxedAnnotations, CategoricalLabels
 from .preprocess.utils import show_tensor, show_tensor_grid
 from .localization import SpatialEvent, SynchronizedRecorderArray
 from .utils import set_seed
+from .data_selection import (
+    GetRecordingStartTimeError,
+    select_files_in_date_range,
+    select_files_in_time_range,
+)
 from .ml.shallow_classifier import MLPClassifier
 from .visualization import annotate, inspect, explore_features, explore_histogram
