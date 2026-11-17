@@ -316,9 +316,14 @@ def select_files_in_date_range(
         only if metadata lacks a usable timestamp. Defaults to False.
         file_timezone: pytz timezone name for naive timestamps. For aware timestamps,
         its offset must agree with the encoded offset at that instant.
-        raise_exceptions: If False, skip files with timestamp errors. If
-        True (default), raise GetRecordingStartTimeError with the original cause. Includes
-        missing timestamps, DST failures, and timezone conflicts.
+        raise_exceptions: If True (default), raise GetRecordingStartTimeError
+        with the original cause. If False, skip files with timestamp errors.
+        Errors include missing timestamps, conflicting timezone offsets,
+        naive timestamps without a supplied zone, and ambiguous or
+        nonexistent local times during daylight-saving transitions. Invalid
+        date/time bounds and unrecognized timezone names raise before
+        processing files. File modification times and the computer's local
+        timezone are never used.
 
     Returns:
         List of original path objects whose recording starts match the range.
@@ -375,22 +380,31 @@ def select_files_in_time_range(
     Args:
         files: Iterable of path-like objects.
         earliest_time: Timezone-free datetime.time lower boundary.
-        latest_time: Timezone-free datetime.time upper boundary. If earlier than earliest_time, the range wraps midnight. Equal bounds match exactly.
+        latest_time: Timezone-free datetime.time upper boundary. If earlier
+        than earliest_time, the range wraps midnight. Equal bounds match
+        exactly.
         target_timezone: pytz timezone name for wall-clock comparisons.
-        parse_timestamp_from_filename: Enable best-effort filename fallback; metadata
-        is preferred. Defaults to False.
-        file_timezone: Timezone name for naive timestamps, or an offset consistency
-        check for aware timestamps; never overrides an encoded timezone.
-        raise_exceptions: If False, skip files with timestamp errors. If
-        True (default), raise GetRecordingStartTimeError with the original cause.
-        Includes missing timestamps, DST failures, and timezone conflicts.
+        parse_timestamp_from_filename: Enable best-effort filename fallback;
+        metadata is preferred. Defaults to False.
+        file_timezone: Timezone name for naive timestamps, or an offset
+        consistency check for aware timestamps; never overrides an encoded
+        timezone.
+        raise_exceptions: If True (default), raise GetRecordingStartTimeError
+        with the original cause. If False, skip files with timestamp errors.
+        Errors include missing timestamps, conflicting timezone offsets,
+        naive timestamps without a supplied zone, and ambiguous or
+        nonexistent local times during daylight-saving transitions. Invalid
+        date/time bounds and unrecognized timezone names raise before
+        processing files. File modification times and the computer's local
+        timezone are never used.
 
     Returns:
         List of original paths preserving order and duplicates.
 
     Raises:
         ValueError: Invalid bounds, timezone names, or flags.
-        GetRecordingStartTimeError: File timestamp failure when raise_exceptions=True.
+        GetRecordingStartTimeError: File timestamp failure when
+        raise_exceptions=True.
 
     Notes:
         Only recording starts are considered, not recording overlap or file
