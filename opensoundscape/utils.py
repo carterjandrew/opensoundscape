@@ -520,7 +520,7 @@ def select_files_in_date_range(
     target_timezone,
     parse_timestamp_from_filename=False,
     file_timezone=None,
-    raise_exceptions=False,
+    raise_exceptions=True,
 ):
     """Selects recordings with start times within a date range, including start and end date
 
@@ -533,8 +533,8 @@ def select_files_in_date_range(
         only if metadata lacks a usable timestamp. Defaults to False.
         file_timezone: pytz timezone name for naive timestamps. For aware timestamps,
         its offset must agree with the encoded offset at that instant.
-        raise_exceptions: If False (default), skip files with timestamp errors. If
-        True, raise GetRecordingStartTimeError with the original cause. Includes
+        raise_exceptions: If False, skip files with timestamp errors. If
+        True (default), raise GetRecordingStartTimeError with the original cause. Includes
         missing timestamps, DST failures, and timezone conflicts.
 
     Returns:
@@ -585,7 +585,7 @@ def select_files_in_time_range(
     target_timezone,
     parse_timestamp_from_filename=False,
     file_timezone=None,
-    raise_exceptions=False,
+    raise_exceptions=True,
 ):
     """Select recordings by time of day they started, inclusive of end values
 
@@ -598,8 +598,8 @@ def select_files_in_time_range(
         is preferred. Defaults to False.
         file_timezone: Timezone name for naive timestamps, or an offset consistency
         check for aware timestamps; never overrides an encoded timezone.
-        raise_exceptions: If False (default), skip files with timestamp errors. If
-        True, raise GetRecordingStartTimeError with the original cause.
+        raise_exceptions: If False, skip files with timestamp errors. If
+        True (default), raise GetRecordingStartTimeError with the original cause.
         Includes missing timestamps, DST failures, and timezone conflicts.
 
     Returns:
